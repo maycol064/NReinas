@@ -23,42 +23,57 @@ def NQueens(queens, n, k, dictSolutions):
         global x
         # Incrementamos el cont
         x = x + 1
+        # Definimos el arreglo que guardará soluciones
         sol = []
-        # print(f'Solución: {x}: ', end="")
+        # Bucle para iterar al arreglo de reinas
         for i in range(0, n):
-            # print(f'{queens[i]} , ', end="")
+            # Al arreglo soluciones le agregamos las reinas
             sol.append(queens[i])
-        # print("\n")
+        # Al diccionario le agregamos las soluciones
         dictSolutions[x] = {
             x : sol
         }
+    # Si es falso
     else:
+        # Iteramos el array de reinas para que verifique si las reinas existen y hace una llamada recursiva a la
+        # función NQueens
         for queens[k] in range(0, n):
             if(checkQueens(queens, n, k)):
                 NQueens(queens, n, k+1, dictSolutions)
+    # Retornamos el total de soluciones
     return x
 
+# Función para la interfaz gráfica y eventos
 def window():
+    # Definimos root como la ventana
     root = Tk()
+    # Damos dimensiones
     root.geometry('1024x600')
+    # Título de la ventana
     root.title('N Reinas')
 
+    # Label del título
     mainTitle = ttk.Label(root, text="Problema de las N Reinas")
     mainTitle.pack() 
     mainTitle.config(font=('Arial', 24))
     
+    # Espacio jaja
     Label(root, text=" ").pack()
 
+    # Etiqueta label para pedir el número de reinas
     txtEntryQueens = ttk.Label(root, text="Ingrese el número de reinas:")
     txtEntryQueens.pack()
     txtEntryQueens.config(font=('Arial', 16))
 
+    # Etiqueta entry para escribir el número de reinas
     entryQueens = ttk.Entry(root)
     entryQueens.pack()
     entryQueens.config(font=('Arial', 12), justify=("center"))
 
+    # Espacio
     Label(root, text=" ").pack()
 
+    # Estilos para los botones
     s = ttk.Style()
     s.configure(
         "MyButton.TButton",
@@ -66,6 +81,7 @@ def window():
         background="#000000"
     )
 
+    # Función para obtener y validar el número y mandar a llamar a la función NQueens
     def callQueens():
         k = 0
         dictSolutions = {}
@@ -75,8 +91,6 @@ def window():
             if(m > 3):
                 queens = [-1 for n in range(0, m)]
                 numSol = NQueens(queens, m, k, dictSolutions)
-                # print(f'\n{res}')
-                # print(f'\n{dictSolutions}')
                 Label(root, text=" ").pack()
                 labelSolutions = ttk.Label(root, text=f'Total de soluciones: {numSol}')
                 labelSolutions.pack()
@@ -102,6 +116,7 @@ def window():
                         m = int(n)
                         if m > 0 and m <= numSol:
                             print(f'\n{dictSolutions}')
+                            ### Aquí va el código del tablero ###
                         else:
                             messagebox.showinfo(f'Entre 0 y {numSol}', f'El número debe ser mayor a 0 y menor a {numSol}.')
                             entrySol.delete("0","end")
