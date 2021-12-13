@@ -1,18 +1,27 @@
+# Importación de librerías
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
+# Declaramos variable global
 x = 0
 
+# Esta función revisa algo jajaja
 def checkQueens(queens, n, k):
     for i in range(0, k):
         if((queens[i] == queens[k]) or (abs(k - i) == abs(queens[k] - queens[i]))):
             return False
     return True
 
+''' Función que resuelve el problema de las N Reinas, recibe 4 parámetros, el array de reinas, el número
+de reinas, el contador de incialización, y el diccionario para guardar todas las soluciones, retorna
+el número total de soluciones '''
 def NQueens(queens, n, k, dictSolutions):
+    # Comprueba si k es igual a n
     if(k == n):
+        # Definimos a la variable global
         global x
+        # Incrementamos el cont
         x = x + 1
         sol = []
         # print(f'Solución: {x}: ', end="")
@@ -50,6 +59,13 @@ def window():
 
     Label(root, text=" ").pack()
 
+    s = ttk.Style()
+    s.configure(
+        "MyButton.TButton",
+        font=("Arial", 12),
+        background="#000000"
+    )
+
     def callQueens():
         k = 0
         dictSolutions = {}
@@ -58,25 +74,45 @@ def window():
             m = int(n)
             if(m > 3):
                 queens = [-1 for n in range(0, m)]
-                res = NQueens(queens, m, k, dictSolutions)
+                numSol = NQueens(queens, m, k, dictSolutions)
                 # print(f'\n{res}')
                 # print(f'\n{dictSolutions}')
                 Label(root, text=" ").pack()
-                labelSolutions = ttk.Label(root, text=f'Total de soluciones: {res}')
+                labelSolutions = ttk.Label(root, text=f'Total de soluciones: {numSol}')
                 labelSolutions.pack()
                 labelSolutions.config(font=('Arial', 16))
                 entryQueens['state'] = DISABLED
                 btnQueens['state'] = DISABLED
 
-                ### AQUÍ SE SUPONE QUE VA EL CÓDIGO PA LA GRÁFICA ###
-
-                Label(root, text=" ").pack()
                 Label(root, text=" ").pack()
                 Label(root, text=" ").pack()
 
                 labelSol = ttk.Label(root, text="Ingrese el número de la solución que desea ver: ")
                 labelSol.pack()
                 labelSol.config(font=('Arial', 12))
+                
+                entrySol = ttk.Entry(root)
+                entrySol.pack()
+                entrySol.config(font=('Arial', 12), justify=("center"))
+
+                def showBoard():
+                    print('\nAquí va el código del tablero\n')
+                    n = entrySol.get()
+                    if n.isdigit():
+                        m = int(n)
+                        if m > 0 and m <= numSol:
+                            print(f'\n{dictSolutions}')
+                        else:
+                            messagebox.showinfo(f'Entre 0 y {numSol}', f'El número debe ser mayor a 0 y menor a {numSol}.')
+                            entrySol.delete("0","end")
+                    else:
+                        messagebox.showinfo('Sólo números', 'Sólo se permiten números mayores a 0.')
+                        entrySol.delete("0","end")
+
+                Label(root, text=" ").pack()
+
+                btnSol = ttk.Button(root, text="Mostrar", style="MyButton.TButton", command=showBoard)
+                btnSol.pack()
             else:
                 # print("\nEl número debe ser mayor a 3")
                 messagebox.showinfo('Mayor a 3', "El número debe ser mayor a 3.")
@@ -85,13 +121,6 @@ def window():
             # print('\nSólo se permite ingresar números')
             messagebox.showinfo('Sólo números', 'Sólo se permiten números mayores a 3.')
             entryQueens.delete("0","end")
-
-    s = ttk.Style()
-    s.configure(
-        "MyButton.TButton",
-        font=("Arial", 12),
-        background="#000000"
-    )
 
     btnQueens = ttk.Button(root, text="Enter", style="MyButton.TButton", command=callQueens)
     btnQueens.pack()
